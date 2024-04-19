@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .country-info {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .country-info h2 {
+            margin-top: 0;
+        }
+
+        .country-info p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Country Information</h1>
+        <div class="form-group">
+            <label for="country-input">Enter a country:</label>
+            <input type="text" id="country-input" placeholder="E.g. United States">
+            <button onclick="getCountryInfo()">Get Information</button>
+        </div>
+        <div class="country-info" id="country-info"></div>
+    </div>
+
+    <script>
+        function getCountryInfo() {
+            const countryInput = document.getElementById('country-input').value;
+            const url = `https://restcountries.com/v3.1/name/${countryInput}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const countryInfo = data[0];
+                    const countryInfoContainer = document.getElementById('country-info');
+
+                    countryInfoContainer.innerHTML = `
+                        <h2>${countryInfo.name.common}</h2>
+                        <p>Capital: ${countryInfo.capital}</p>
+                        <p>Population: ${countryInfo.population}</p>
+                        <p>Region: ${countryInfo.region}</p>
+                        <p>Subregion: ${countryInfo.subregion}</p>
+                        <p>Area: ${countryInfo.area} km²</p>
+                        <p>Language: ${Object.values(countryInfo.languages).join(', ')}</p>
+                        
+                    `;
+                })
+                .catch(error => {
+                    console.log(error);
+                    const countryInfoContainer = document.getElementById('country-info');
+                    countryInfoContainer.innerHTML = '<p>Country not found. Please try again.</p>';
+                });
+        }
+    </script>
+</body>
+</html>
